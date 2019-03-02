@@ -4,7 +4,7 @@ const Product = require('../models/Product')
 
 const router = new express.Router()
 
-function validateBookCreateForm(payload) {
+function validateProductCreateForm(payload) {
   const errors = {}
   let isFormValid = true
   let message = ''
@@ -43,9 +43,9 @@ function validateBookCreateForm(payload) {
 }
 
 router.post('/create', authCheck, (req, res) => {
-  const bookObj = req.body
+  const productObj = req.body
   if (req.user.roles.indexOf('Admin') > -1) {
-    const validationResult = validateBookCreateForm(bookObj)
+    const validationResult = validateProductCreateForm(productObj)
     if (!validationResult.success) {
       return res.status(200).json({
         success: false,
@@ -55,12 +55,12 @@ router.post('/create', authCheck, (req, res) => {
     }
 
     Product
-      .create(bookObj)
-      .then((createdBook) => {
+      .create(productObj)
+      .then((createdproduct) => {
         res.status(200).json({
           success: true,
           message: 'Product added successfully.',
-          data: createdBook
+          data: createdproduct
         })
       })
       .catch((err) => {
@@ -84,9 +84,9 @@ router.post('/create', authCheck, (req, res) => {
 
 router.post('/edit/:id', authCheck, (req, res) => {
   if (req.user.roles.indexOf('Admin') > -1) {
-    const bookId = req.params.id
-    const bookObj = req.body
-    const validationResult = validateBookCreateForm(bookObj)
+    const productId = req.params.id
+    const productObj = req.body
+    const validationResult = validateProductCreateForm(productObj)
     if (!validationResult.success) {
       return res.status(200).json({
         success: false,
@@ -96,22 +96,22 @@ router.post('/edit/:id', authCheck, (req, res) => {
     }
 
     Product
-      .findById(bookId)
-      .then(existingBook => {
-        existingBook.title = bookObj.title
-        existingBook.author = bookObj.author
-        existingBook.genres = bookObj.genres
-        existingBook.description = bookObj.description
-        existingBook.price = bookObj.price
-        existingBook.image = bookObj.image
+      .findById(productId)
+      .then(existingproduct => {
+        existingproduct.title = productObj.title
+        existingproduct.author = productObj.author
+        existingproduct.genres = productObj.genres
+        existingproduct.description = productObj.description
+        existingproduct.price = productObj.price
+        existingproduct.image = productObj.image
 
-        existingBook
+        existingproduct
           .save()
-          .then(editedBook => {
+          .then(editedproduct => {
             res.status(200).json({
               success: true,
               message: 'Product edited successfully.',
-              data: editedBook
+              data: editedproduct
             })
           })
           .catch((err) => {
@@ -145,8 +145,8 @@ router.post('/edit/:id', authCheck, (req, res) => {
 router.get('/all', (req, res) => {
   Product
     .find()
-    .then(books => {
-      res.status(200).json(books)
+    .then(products => {
+      res.status(200).json(products)
     })
 })
 
@@ -165,8 +165,8 @@ router.post('/review/:id', authCheck, (req, res) => {
 
   Product
     .findById(id)
-    .then(book => {
-      if (!book) {
+    .then(product => {
+      if (!product) {
         return res.status(200).json({
           success: false,
           message: 'Product not found.'
@@ -178,16 +178,16 @@ router.post('/review/:id', authCheck, (req, res) => {
         createdBy: username
       }
 
-      let reviews = book.reviews
+      let reviews = product.reviews
       reviews.push(reviewObj)
-      book.reviews = reviews
-      book
+      product.reviews = reviews
+      product
         .save()
-        .then((book) => {
+        .then((product) => {
           res.status(200).json({
             success: true,
             message: 'Review added successfully.',
-            data: book
+            data: product
           })
         })
         .catch((err) => {
@@ -214,8 +214,8 @@ router.post('/like/:id', authCheck, (req, res) => {
   const username = req.user.username
   Product
     .findById(id)
-    .then(book => {
-      if (!book) {
+    .then(product => {
+      if (!product) {
         const message = 'Product not found.'
         return res.status(200).json({
           success: false,
@@ -223,18 +223,18 @@ router.post('/like/:id', authCheck, (req, res) => {
         })
       }
 
-      let likes = book.likes
+      let likes = product.likes
       if (!likes.includes(username)) {
         likes.push(username)
       }
-      book.likes = likes
-      book
+      product.likes = likes
+      product
         .save()
-        .then((book) => {
+        .then((product) => {
           res.status(200).json({
             success: true,
             message: 'Product liked successfully.',
-            data: book
+            data: product
           })
         })
         .catch((err) => {
@@ -261,8 +261,8 @@ router.post('/unlike/:id', authCheck, (req, res) => {
   const username = req.user.username
   Product
     .findById(id)
-    .then(book => {
-      if (!book) {
+    .then(product => {
+      if (!product) {
         let message = 'Product not found.'
         return res.status(200).json({
           success: false,
@@ -270,20 +270,20 @@ router.post('/unlike/:id', authCheck, (req, res) => {
         })
       }
 
-      let likes = book.likes
+      let likes = product.likes
       if (likes.includes(username)) {
         const index = likes.indexOf(username)
         likes.splice(index, 1)
       }
 
-      book.likes = likes
-      book
+      product.likes = likes
+      product
         .save()
-        .then((book) => {
+        .then((product) => {
           res.status(200).json({
             success: true,
             message: 'Product unliked successfully.',
-            data: book
+            data: product
           })
         })
         .catch((err) => {
@@ -310,8 +310,8 @@ router.delete('/delete/:id', authCheck, (req, res) => {
   if (req.user.roles.indexOf('Admin') > -1) {
     Product
       .findById(id)
-      .then((book) => {
-        book
+      .then((product) => {
+        product
           .remove()
           .then(() => {
             return res.status(200).json({

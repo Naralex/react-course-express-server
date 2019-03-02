@@ -1,12 +1,12 @@
-const path = require('path');
+const path = require('path')
 
-let rootPath = path.normalize(path.join(__dirname, '/../'));
+let rootPath = path.normalize(path.join(__dirname, '/../'))
 
 module.exports = {
   development: {
     rootPath: rootPath,
     db: 'mongodb://Admin:AdminmLab89@ds155825.mlab.com:55825/react-module',
-    port: 55825
+    port: 5000
   },
   staging: {
   },

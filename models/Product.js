@@ -1,18 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-const REQUIRED_VALIDATION_MESSAGE = '{PATH} is required';
+const REQUIRED_VALIDATION_MESSAGE = '{PATH} is required'
 
 let productSchema = new mongoose.Schema({
-  title: {type: mongoose.Schema.Types.String, required: REQUIRED_VALIDATION_MESSAGE, unique: [true, 'Product already exists.']},
-  genres: [{type: mongoose.Schema.Types.String}],
-  author: {type: mongoose.Schema.Types.String, required: REQUIRED_VALIDATION_MESSAGE},
-  description: {type: mongoose.Schema.Types.String},
-  price: {type: mongoose.Schema.Types.Number, required: REQUIRED_VALIDATION_MESSAGE},
-  image: {type: mongoose.Schema.Types.String, required: REQUIRED_VALIDATION_MESSAGE},
-  likes: [{type: mongoose.Schema.Types.String}],
-  reviews: []
-});
+  name: {
+    type: mongoose.Schema.Types.String,
+    required: REQUIRED_VALIDATION_MESSAGE,
+    unique: [true, 'Product already exists.']
+  },
+  manufacturer: {type: mongoose.Schema.Types.String},
+  link: {type: mongoose.Schema.Types.String, required: true},
+  text: {type: mongoose.Schema.Types.String},
+  image: {
+    path: {type: mongoose.Schema.Types.String, required: REQUIRED_VALIDATION_MESSAGE},
+    pathBig: {type: mongoose.Schema.Types.String, required: REQUIRED_VALIDATION_MESSAGE}
+  },
+  availability: {type: mongoose.Schema.Types.String},
+  wholesalePrice: {type: mongoose.Schema.Types.Number, required: REQUIRED_VALIDATION_MESSAGE},
+  retailPrice: {type: mongoose.Schema.Types.Number, required: REQUIRED_VALIDATION_MESSAGE}
+})
 
-let Product = mongoose.model('Product', productSchema);
+let Product = mongoose.model('Product', productSchema)
 
-module.exports = Product;
+module.exports = Product
