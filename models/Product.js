@@ -9,13 +9,9 @@ let productSchema = new mongoose.Schema({
     unique: [true, 'Product already exists.']
   },
   manufacturer: {type: mongoose.Schema.Types.String},
-  link: {type: mongoose.Schema.Types.String, required: true},
+  // link: {type: mongoose.Schema.Types.String, required: true},
   text: {type: mongoose.Schema.Types.String},
-  image: {
-    path: {type: mongoose.Schema.Types.String, required: REQUIRED_VALIDATION_MESSAGE},
-    pathBig: {type: mongoose.Schema.Types.String, required: REQUIRED_VALIDATION_MESSAGE}
-  },
-  availability: {type: mongoose.Schema.Types.String},
+  image: {type: mongoose.Schema.Types.String, required: REQUIRED_VALIDATION_MESSAGE},
   wholesalePrice: {type: mongoose.Schema.Types.Number, required: REQUIRED_VALIDATION_MESSAGE},
   retailPrice: {type: mongoose.Schema.Types.Number, required: REQUIRED_VALIDATION_MESSAGE}
 })
